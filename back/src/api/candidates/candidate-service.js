@@ -11,34 +11,36 @@ class CandidateService extends BaseService {
     }
 
 
-    async create(req, res) {
-        console.log(req.body, req.file);
+    async create(req) {
         if (!req.file) {
-            return res.status(400).send('No file uploaded.');
+            throw new Error('No file uploaded.');
         }
 
         const workbook = new ExcelJS.Workbook();
-        await workbook.xlsx.load(req.file.buffer); // leer desde memoria
-        const worksheet = workbook.worksheets[0]; // primera hoja
+        await workbook.xlsx.load(req.file.buffer); 
+        const worksheet = workbook.worksheets[0]; 
 
         const firstRow = worksheet.getRow(1).values;
         if (firstRow.length < 4) {
-            return res.status(400).send('Invalid file format.');
+            throw new Error('Invalid file format.');
         }
-        const seniority = firstRow[1];
-        const yearsExperience = Number(firstRow[2]);
-        let availability = firstRow[3];
+        let [ , seniority, yearsExperience, availability ] = firstRow;
         if (!['junior', 'senior'].includes(seniority))
-            return res.status(400).send('Seniority must have junior or senior value.');
+            throw new Error('Seniority must have junior or senior value.');
         if (isNaN(yearsExperience))
-            return res.status(400).send('Years of experience must be a number.');
+            throw new Error('Years of experience must be a number.');
         if (!['true', 'false'].includes(availability))
-            return res.status(400).send('Seniority must have junior or senior value.');
+            throw new Error('Availability must be true or false.');
         availability = availability === 'true';
-        console.log(seniority, yearsExperience, availability);
 
-
-
+        const query = { name: req.body.name, surName: req.body.surname };
+        const previousRow = await this.repository.getOneEntity(query);
+        if (previousRow) {
+            await this.repository.update({ seniority, yearsExperience, availability }, query);
+        }
+        else {
+            this.repository.create({ name: req.body.name, surName: req.body.surname, seniority, yearsExperience, availability });
+        }
         return { name: req.body.name, surName: req.body.surname, seniority, yearsExperience, availability };
     }
 }

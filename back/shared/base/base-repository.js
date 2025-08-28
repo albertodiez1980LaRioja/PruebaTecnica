@@ -5,20 +5,23 @@ class BaseRepository {
         this.options = options;
     }
 
-  
-    async create(req, res) {
-        let campos = req.body;
-        try {
-            let newRow = await this.model.create(campos, params)
-            return newRow;
-        } catch (err) {
-            console.log('Fail on create', err);
-            res.status(500).json({
-                message: 'Something goes wrong: ' + err,
-                data: {}
-            });
-        }
 
+    async create(entityDTO) {
+        let newRow = await this.model.create(entityDTO);
+        return newRow;
+    }
+
+    async update(entityDTO, query) {
+        const rows = await this.model.findAll(query);
+        rows.forEach(async row => {
+            await row.update(entityDTO);
+        });
+        return rows;
+    }
+
+    async getOneEntity(params) {
+        const element = await this.model.findOne({ where: params });
+        return element;
     }
 }
 

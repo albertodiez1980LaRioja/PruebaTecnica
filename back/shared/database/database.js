@@ -21,5 +21,14 @@ const sequelize = new Sequelize(
 }
 );
 
+sequelize.sync({ force: false }); // sync all tables
+
+for (let table in sequelize.models) {
+    const model = sequelize.model(table);
+    if (model.asociate != undefined) {
+        model.asociate();
+    }
+}
+
 module.exports  = { sequelize };
 

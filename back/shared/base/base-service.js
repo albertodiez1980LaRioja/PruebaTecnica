@@ -8,9 +8,12 @@ class BaseService {
         this.options = options;
     }
 
+    async create(req) {
+        return await this.repository.create(req.body);
+    }
 
-    async create(req, res) {
-        return await this.repository.create(req, res);
+    async update(req) {
+        return await this.repository.update(req.body, req.params);
     }
 
 }

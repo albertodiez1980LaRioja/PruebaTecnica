@@ -10,15 +10,19 @@ class BaseController {
     }
 
     async create(req, res) {
-        const newRow = await this.service.create(req, res);
-        if (newRow) {
-            res.json({
-                message: 'Created succefully',
-                data: newRow
+        try {
+            const newRow = await this.service.create(req);
+            if (newRow) {
+                res.json(newRow);
+            }
+            return newRow;
+        } catch (e) {
+            console.error(e);
+            res.status(500).json({
+                message: 'Error creating resource',
+                error: e.message
             });
         }
-
-        return newRow;
     }
 }
 

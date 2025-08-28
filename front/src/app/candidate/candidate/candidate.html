@@ -1,1 +1,21 @@
-<p>candidate worksssssaa!</p>
+<form [formGroup]="candidateForm" (ngSubmit)="onSubmit()"> 
+    <label for="name">First Name: </label> 
+    <input id="name" type="text"
+        formControlName="name" /> 
+    <label for="surname">Last Name: </label> 
+    <input id="surname" type="text"
+        formControlName="surname" />
+
+
+    <div class="drop-zone"
+        (click)="fileInput?.click()"
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave($event)"
+        (drop)="onDrop($event)">
+        <p *ngIf="!selectedFile">Arrastra tu archivo aquí o haz click para seleccionar</p>
+        <p *ngIf="selectedFile">Archivo seleccionado: {{ selectedFile ? selectedFile.name : '' }}</p>
+        <input type="file" (change)="onFileSelected($event)" hidden #fileInput accept=".xls,.xlsx">
+      </div>
+
+    <button type="submit" [disabled]="candidateForm.invalid || !selectedFile">Enviar</button>
+</form>

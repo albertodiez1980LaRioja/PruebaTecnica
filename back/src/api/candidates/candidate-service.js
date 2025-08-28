@@ -12,6 +12,7 @@ class CandidateService extends BaseService {
 
 
     async create(req) {
+        console.log(req.body);
         if (!req.file) {
             throw new Error('No file uploaded.');
         }
@@ -19,7 +20,7 @@ class CandidateService extends BaseService {
         const workbook = new ExcelJS.Workbook();
         await workbook.xlsx.load(req.file.buffer); 
         const worksheet = workbook.worksheets[0]; 
-
+        
         const firstRow = worksheet.getRow(1).values;
         if (firstRow.length < 4) {
             throw new Error('Invalid file format.');

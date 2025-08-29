@@ -1,0 +1,11 @@
+<h2 mat-dialog-title>Candidato creado o actualizado</h2>
+<mat-dialog-content>
+    <p>Nombre: {{ data.name }}</p>
+    <p>Apellidos: {{ data.surName }}</p>
+    <p>Antigüedad: {{ data.seniority }}</p>
+    <p>Años de experiencia: {{ data.yearsExperience }}</p>
+    <p>Disponibilidad: {{ data.availability ? 'Sí' : 'No' }}</p>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button mat-dialog-close>Aceptar</button>
+</mat-dialog-actions>

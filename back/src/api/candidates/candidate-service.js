@@ -10,6 +10,10 @@ class CandidateService extends BaseService {
         super(repository, options);
     }
 
+    delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));  
+    }
+
 
     async create(req) {
         console.log(req.body);
@@ -42,6 +46,7 @@ class CandidateService extends BaseService {
         else {
             this.repository.create({ name: req.body.name, surName: req.body.surname, seniority, yearsExperience, availability });
         }
+        await this.delay(1000);
         return { name: req.body.name, surName: req.body.surname, seniority, yearsExperience, availability };
     }
 }

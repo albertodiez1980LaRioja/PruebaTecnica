@@ -8,15 +8,16 @@ import {
 } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 
+
 @Component({
-  selector: 'app-popup-updated',
+  selector: 'app-popup-error',
   standalone: true,
   imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose, MatButtonModule],
-  templateUrl: './popup-updated.html',
-  styleUrls: ['./popup-updated.scss'] 
+  templateUrl: './popup-error.html',
+  styleUrls: ['./popup-error.scss']
 })
-export class PopupUpdated {
+export class PopupError {
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
-
+    
   }
 }

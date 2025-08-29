@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, NgZone, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
 import { CandidateService, ICandidate } from '../../services/candidate-service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -6,6 +6,7 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatDialog } from '@angular/material/dialog';
 
 import { PopupUpdated } from './components/popup-updated/popup-updated.js';
+import { PopupError } from '../../shared/components/popup-error/popup-error';
 import { ComponentType } from '@angular/cdk/overlay';
 
 
@@ -32,11 +33,10 @@ export class Candidate {
 
   constructor(
     private candidateService: CandidateService,
-    private cdr: ChangeDetectorRef,
     private dialog: MatDialog,
-    private ngZone: NgZone,
+    private cdr: ChangeDetectorRef,
   ) {
-
+    this.uploading = false;
   }
 
   validFile(file: File): boolean {
@@ -74,9 +74,7 @@ export class Candidate {
     }
   }
 
-
   send() {
-    this.ngZone.run(() => {
     this.candidate.name = this.candidateForm.value.name || '';
     this.candidate.surname = this.candidateForm.value.surname || '';
     if (this.selectedFile && !this.validFile(this.selectedFile))
@@ -91,14 +89,14 @@ export class Candidate {
         this.selectedFile = undefined;
         this.openDialog(PopupUpdated, response);
         this.uploading = false;
-        this.cdr.detectChanges();
       },
       error: error => {
-        console.error('Error creating candidate:', error);
         this.uploading = false;
+        this.cdr.detectChanges();
+        this.openDialog(PopupError, error);
+        console.error('Error creating candidate:', error);
       }
     });
-  });
   }
 
   openDialog(component: ComponentType<any>, data: any) {

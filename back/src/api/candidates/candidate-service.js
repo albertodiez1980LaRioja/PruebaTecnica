@@ -27,15 +27,22 @@ class CandidateService extends BaseService {
         
         const firstRow = worksheet.getRow(1).values;
         if (firstRow.length < 4) {
+            await this.delay(1000);
             throw new Error('Invalid file format.');
         }
         let [ , seniority, yearsExperience, availability ] = firstRow;
-        if (!['junior', 'senior'].includes(seniority))
+        if (!['junior', 'senior'].includes(seniority)) {
+            await this.delay(1000);
             throw new Error('Seniority must have junior or senior value.');
-        if (isNaN(yearsExperience))
+        }
+        if (isNaN(yearsExperience)) {
+            await this.delay(1000);
             throw new Error('Years of experience must be a number.');
-        if (!['true', 'false'].includes(availability))
+        }
+        if (!['true', 'false'].includes(availability)) {
+            await this.delay(1000);
             throw new Error('Availability must be true or false.');
+        }
         availability = availability === 'true';
 
         const query = { name: req.body.name, surName: req.body.surname };

@@ -2,13 +2,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-
-
-export interface ICandidate {
-  name: string;
-  surname: string;
-  excel: Blob | undefined;
-}
+import { ICandidate, ICandidateSaved } from '../shared/interfaces/candidate-interface';
 
 @Injectable({
   providedIn: 'root'
@@ -18,13 +12,13 @@ export class CandidateService {
 
   constructor(private http: HttpClient) {}
 
-  createCandidate(candidate: ICandidate): Observable<any> {
+  createCandidate(candidate: ICandidate): Observable<ICandidateSaved> {
     let formData = new FormData();
     formData.append('name', candidate.name);
     formData.append('surname', candidate.surname);
     if (candidate.excel) {
       formData.append('excel', candidate.excel);
     }
-    return this.http.post(this.baseUrl, formData);
+    return this.http.post<ICandidateSaved>(this.baseUrl, formData);
   }
 }

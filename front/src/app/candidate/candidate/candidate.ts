@@ -1,5 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { CandidateService, ICandidate } from '../../services/candidate-service';
+import { CandidateService } from '../../services/candidate-service';
+
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
@@ -10,6 +11,7 @@ import { PopupUpdated } from './components/popup-updated/popup-updated.js';
 import { PopupError } from '../../shared/components/popup-error/popup-error';
 import { FileDropComponent } from '../../shared/components/file-drop-component/file-drop-component';
 import { Subject, takeUntil } from 'rxjs';
+import { ICandidate, ICandidateSaved } from '../../shared/interfaces/candidate-interface';
 
 
 @Component({
@@ -75,7 +77,7 @@ export class Candidate {
     this.selectedFile = undefined;
   }
 
-  openDialog(component: ComponentType<any>, data: any) {
+  openDialog(component: ComponentType<any>, data: ICandidateSaved) {
     this.dialogRef = this.dialog.open(component, {
       width: '40em',
       data: data

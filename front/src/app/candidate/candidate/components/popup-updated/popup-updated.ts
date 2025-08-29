@@ -7,6 +7,7 @@ import {
   MatDialogTitle
 } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { ICandidateSaved } from '../../../../shared/interfaces/candidate-interface';
 
 @Component({
   selector: 'app-popup-updated',
@@ -16,7 +17,7 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrls: ['./popup-updated.scss'] 
 })
 export class PopupUpdated {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: ICandidateSaved) {
 
   }
 }

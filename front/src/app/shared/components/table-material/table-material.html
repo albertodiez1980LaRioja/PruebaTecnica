@@ -1,0 +1,27 @@
+
+@if (data && data.length > 0) {
+    <div class="table-container" >
+        <table mat-table [dataSource]="data" class="mat-elevation-z8">
+
+            <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column.name">
+                <th mat-header-cell *matHeaderCellDef> {{ column.label }} </th>
+                @if (column.type === 'boolean') {
+                    <td mat-cell *matCellDef="let element"> {{ element[column.name] ? 'Yes' : 'No' }} </td>
+                }
+                @else {
+                    <td mat-cell *matCellDef="let element"> {{ element[column.name] }} </td>
+                }
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="names"></tr>
+            <tr mat-row *matRowDef="let row; columns: names"></tr>
+        </table>
+    </div>
+}
+
+
+@if (!data || data.length === 0) {
+    <div>
+        <p>There is no data to display</p>
+    </div>
+}

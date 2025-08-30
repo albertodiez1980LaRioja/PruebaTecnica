@@ -13,9 +13,6 @@ app.disable('etag');
 app.use(morgan('dev')); // dev print calls
 app.use(json()); // JSON format files
 
-const cors = require('cors');
-//app.use(cors());
-
 app.use('/api/candidates', CandidateController.CandidateController.router);
 
 module.exports = app;  

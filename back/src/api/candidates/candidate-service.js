@@ -10,8 +10,28 @@ class CandidateService extends BaseService {
         super(repository, options);
     }
 
-    delay(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));  
+    async dataFromExcel(buffer) {
+        const workbook = new ExcelJS.Workbook();
+        await workbook.xlsx.load(buffer);
+        if (workbook.worksheets.length === 0) 
+            throw new Error('No worksheets found.');
+        const worksheet = workbook.worksheets[0];        
+        const firstRow = worksheet.getRow(1).values;
+        if (firstRow.length < 4) {
+            throw new Error('Invalid file format.');
+        }
+        let [ , seniority, yearsExperience, availability ] = firstRow;
+        if (!['junior', 'senior'].includes(seniority)) {
+            throw new Error('Seniority must have junior or senior value.');
+        }
+        if (isNaN(yearsExperience)) {
+            throw new Error('Years of experience must be a number.');
+        }
+        if (!['true', 'false'].includes(availability)) {
+            throw new Error('Availability must be true or false.');
+        }
+        availability = availability === 'true';
+        return { seniority, yearsExperience, availability };
     }
 
 
@@ -21,30 +41,7 @@ class CandidateService extends BaseService {
             throw new Error('No file uploaded.');
         }
 
-        const workbook = new ExcelJS.Workbook();
-        await workbook.xlsx.load(req.file.buffer); 
-        const worksheet = workbook.worksheets[0]; 
-        
-        const firstRow = worksheet.getRow(1).values;
-        if (firstRow.length < 4) {
-            await this.delay(1000);
-            throw new Error('Invalid file format.');
-        }
-        let [ , seniority, yearsExperience, availability ] = firstRow;
-        if (!['junior', 'senior'].includes(seniority)) {
-            await this.delay(1000);
-            throw new Error('Seniority must have junior or senior value.');
-        }
-        if (isNaN(yearsExperience)) {
-            await this.delay(1000);
-            throw new Error('Years of experience must be a number.');
-        }
-        if (!['true', 'false'].includes(availability)) {
-            await this.delay(1000);
-            throw new Error('Availability must be true or false.');
-        }
-        availability = availability === 'true';
-
+        const { seniority, yearsExperience, availability } = await this.dataFromExcel(req.file.buffer);
         const query = { name: req.body.name, surName: req.body.surname };
         const previousRow = await this.repository.getOneEntity(query);
         if (previousRow) {
@@ -56,6 +53,11 @@ class CandidateService extends BaseService {
         await this.delay(1000);
         return { name: req.body.name, surName: req.body.surname, seniority, yearsExperience, availability };
     }
+
+    delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));  
+    }
+
 }
 
 exports.CandidateService = CandidateService;

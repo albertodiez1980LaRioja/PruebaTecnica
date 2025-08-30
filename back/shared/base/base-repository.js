@@ -1,3 +1,4 @@
+const { where } = require("sequelize");
 
 class BaseRepository {
     constructor(model, options = {}) {
@@ -12,6 +13,8 @@ class BaseRepository {
     }
 
     async update(entityDTO, query) {
+        if (query && query.where === undefined)
+            query = { where: query };
         const rows = await this.model.findAll(query);
         rows.forEach(async row => {
             await row.update(entityDTO);

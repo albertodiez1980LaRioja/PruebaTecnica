@@ -11,6 +11,10 @@ class CandidateService extends BaseService {
     }
 
     async dataFromExcel(buffer) {
+        const MAX_SIZE = 1 * 1024 * 1024;
+        if (buffer.length > MAX_SIZE) {
+            throw new Error('File too large. Maximum allowed size is 1 MB.');
+        }
         const workbook = new ExcelJS.Workbook();
         await workbook.xlsx.load(buffer);
         if (workbook.worksheets.length === 0) 
@@ -36,7 +40,6 @@ class CandidateService extends BaseService {
 
 
     async create(req) {
-        console.log(req.body);
         if (!req.file) {
             throw new Error('No file uploaded.');
         }
@@ -45,12 +48,15 @@ class CandidateService extends BaseService {
         const query = { name: req.body.name, surName: req.body.surname };
         const previousRow = await this.repository.getOneEntity(query);
         if (previousRow) {
-            await this.repository.update({ seniority, yearsExperience, availability }, query);
+            if (query)
+                await this.repository.update({ seniority, yearsExperience, availability }, query);
+            else
+                throw new Error('Not where on the update.');
         }
         else {
             this.repository.create({ name: req.body.name, surName: req.body.surname, seniority, yearsExperience, availability });
         }
-        await this.delay(1000);
+        await this.delay(1000); // don't respond too quickly
         return { name: req.body.name, surName: req.body.surname, seniority, yearsExperience, availability };
     }
 

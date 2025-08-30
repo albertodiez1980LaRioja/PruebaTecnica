@@ -1,0 +1,17 @@
+    .drop-zone {
+      border: 2px dashed #999;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+
+    .drop-zone.dragover {
+      border-color: #666;
+      background-color: #f0f0f0;
+    }
+
+    .drop-zone.disabled {
+      pointer-events: none; 
+      opacity: 0.5; 
+    }

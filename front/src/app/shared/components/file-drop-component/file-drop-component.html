@@ -1,9 +1,14 @@
 <div class="drop-zone"
-     (click)="triggerInputClick(fileInput)"
-     (dragover)="onDragOver($event)"
-     (dragleave)="onDragLeave($event)"
-     (drop)="onDrop($event)">
-  <p *ngIf="!selectedFile">Arrastra tu archivo aquí o haz click para seleccionar</p>
-  <p *ngIf="selectedFile">Archivo seleccionado: {{ selectedFile.name }}</p>
+    [class.disabled]="disabled"
+    (click)="triggerInputClick(fileInput)"
+    (dragover)="onDragOver($event)"
+    (dragleave)="onDragLeave($event)"
+    (drop)="onDrop($event)">
+  @if (!selectedFile) {
+    <p>Drag your file here or click to select</p>
+  }
+  @if (selectedFile) {
+    <p>File selected: {{ selectedFile.name }}</p>
+  }
   <input type="file" (change)="onFileSelected($event)" hidden #fileInput [accept]="allowedExtensions.join(',')">
 </div>

@@ -5,7 +5,13 @@
       cursor: pointer;
       margin-bottom: 10px;
     }
+
     .drop-zone.dragover {
       border-color: #666;
       background-color: #f0f0f0;
+    }
+
+    .drop-zone.disabled {
+      pointer-events: none; 
+      opacity: 0.5; 
     }

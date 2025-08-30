@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output} from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -10,11 +10,16 @@ import { CommonModule } from '@angular/common';
 })
 export class FileDropComponent {
   @Input() allowedExtensions: string[] = ['.xls', '.xlsx'];
+  @Input() disabled = false;   
   @Output() fileSelected = new EventEmitter<File>();
+
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   selectedFile?: File;
 
   onFileSelected(event: Event) {
+    if (this.disabled) 
+      return;
     const input = event.target as HTMLInputElement;
     if (input.files?.length) {
       const file = input.files[0];
@@ -57,5 +62,12 @@ export class FileDropComponent {
   private isValidFile(file: File): boolean {
     const ext = file.name.slice(file.name.lastIndexOf('.')).toLowerCase();
     return this.allowedExtensions.includes(ext);
+  }
+
+  reset() {
+    this.selectedFile = undefined;
+    if (this.fileInput) {
+      this.fileInput.nativeElement.value = ''; // limpia el input file real
+    }
   }
 }

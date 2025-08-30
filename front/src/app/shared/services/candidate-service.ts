@@ -2,13 +2,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ICandidate, ICandidateSaved } from '../shared/interfaces/candidate-interface';
+import { ICandidate, ICandidateSaved } from '../interfaces/candidate-interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CandidateService {
-  private baseUrl = 'http://localhost:3000/api/candidates';
+  private baseUrl = '/api/candidates';
 
   constructor(private http: HttpClient) {}
 

@@ -1,4 +1,4 @@
-<form [formGroup]="candidateForm" class="body" [style.display]="uploading ? 'none' : 'flex'">
+<form [formGroup]="candidateForm" class="body">
     <div>
         <label for="name">First Name: </label> 
         <input id="name" type="text"
@@ -11,23 +11,27 @@
     </div>
 
     <app-file-drop-component
+        [disabled]="uploading"
         [allowedExtensions]="['.xltx']" 
         (fileSelected)="onFileSelected($event)">
     </app-file-drop-component>
 
     <div class="button">
-        <button type="submit" [disabled]="candidateForm.invalid || !selectedFile" (click)="send()">Enviar</button>
+        <button type="submit" [disabled]="candidateForm.invalid || !selectedFile" (click)="send()">Send</button>
     </div>
 </form>
 
-<div class="body" *ngIf="uploading">
-    <mat-progress-spinner
-        mode="indeterminate"
-        diameter="50"
-        strokeWidth="5"
-        color="primary">
-    </mat-progress-spinner>
-</div>
+
+@if (uploading) {
+    <div class="spinner-overlay">
+        <mat-progress-spinner
+            mode="indeterminate"
+            diameter="50"
+            strokeWidth="5"
+            color="primary">
+        </mat-progress-spinner>
+    </div>
+}
 
 
 

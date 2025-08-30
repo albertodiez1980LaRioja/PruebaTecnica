@@ -7,6 +7,7 @@ import {
   MatDialogTitle
 } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { IErrorHTTP } from '../../interfaces/error.interface';
 
 
 @Component({
@@ -17,7 +18,8 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrls: ['./popup-error.scss']
 })
 export class PopupError {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: IErrorHTTP) {
+    console.log(data);
     
   }
 }

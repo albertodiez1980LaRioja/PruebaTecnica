@@ -1,6 +1,7 @@
-<h2 mat-dialog-title>Error en la operación</h2>
+<h2 mat-dialog-title>Operation error</h2>
 <mat-dialog-content>
-    <p>Mensaje de error: {{ data?.error?.error }}</p>
+    <p>Error message: {{ data.error.error }}</p>
+    <p>Status code: {{ data.status }}</p>
 </mat-dialog-content>
 <mat-dialog-actions>
     <button mat-button mat-dialog-close>Aceptar</button>

@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { CandidateService } from '../../services/candidate-service';
+import { CandidateService } from '../../shared/services/candidate-service';
 
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -35,6 +35,8 @@ export class Candidate {
 
   selectedFile?: File = undefined;
 
+  @ViewChild(FileDropComponent) fileDrop!: FileDropComponent;
+
   private dialogRef?: MatDialogRef<any>;
   private destroy$ = new Subject<void>();
 
@@ -54,18 +56,20 @@ export class Candidate {
     this.candidate.surname = this.candidateForm.value.surname || '';
     this.candidate.excel = this.selectedFile;
     this.uploading = true;
+    this.candidateForm.disable();
     this.candidateService.createCandidate(this.candidate)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: response => {
           this.clearForm();
           this.openDialog(PopupUpdated, response);
+          this.candidateForm.enable();
           this.uploading = false;
         },
         error: error => {
           this.uploading = false;
-          this.clearForm();
           this.openDialog(PopupError, error);
+          this.candidateForm.enable();
           console.error('Error creating candidate:', error);
         }
       });
@@ -74,7 +78,8 @@ export class Candidate {
   clearForm() {
     this.candidateForm.get('name')?.setValue('');
     this.candidateForm.get('surname')?.setValue('');
-    this.selectedFile = undefined;
+    if (this.fileDrop) 
+      this.fileDrop.reset();
   }
 
   openDialog(component: ComponentType<any>, data: ICandidateSaved) {

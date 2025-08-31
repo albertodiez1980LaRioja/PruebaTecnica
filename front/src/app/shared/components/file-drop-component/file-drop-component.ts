@@ -1,5 +1,9 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ComponentType } from '@angular/cdk/overlay';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+
+import { ErrorComponent } from './error-component/error-component';
 
 @Component({
   selector: 'app-file-drop-component',
@@ -17,6 +21,14 @@ export class FileDropComponent {
 
   selectedFile?: File;
 
+  private dialogRef?: MatDialogRef<any>;
+
+  constructor(
+    private dialog: MatDialog,
+  ) {
+
+  }
+
   onFileSelected(event: Event) {
     if (this.disabled) 
       return;
@@ -27,7 +39,7 @@ export class FileDropComponent {
         this.selectedFile = file;
         this.fileSelected.emit(file);
       } else {
-        alert(`Solo se permiten archivos: ${this.allowedExtensions.join(', ')}`);
+        this.openDialog(ErrorComponent, `Only files with the extensions: ${this.allowedExtensions.join(', ')}`);
       }
     }
   }
@@ -50,7 +62,7 @@ export class FileDropComponent {
         this.selectedFile = file;
         this.fileSelected.emit(file);
       } else {
-        alert(`Solo se permiten archivos: ${this.allowedExtensions.join(', ')}`);
+        this.openDialog(ErrorComponent, `Only files with the extensions: ${this.allowedExtensions.join(', ')}`);
       }
     }
   }
@@ -69,5 +81,16 @@ export class FileDropComponent {
     if (this.fileInput) {
       this.fileInput.nativeElement.value = ''; // limpia el input file real
     }
+  }
+
+  openDialog(component: ComponentType<any>, data: string) {
+    this.dialogRef = this.dialog.open(component, {
+      width: '40em',
+      data: data
+    });
+  }
+
+  ngOnDestroy() {
+    this.dialogRef?.close();
   }
 }

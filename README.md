@@ -55,3 +55,7 @@ Antes hay que iniciar.
 
 Hay que abrir un navegador y poner la dirección http://localhost:4200/. Hay que mandar los archivos excel y poner el nombre y los apellidos.
 Si se repite nombre y apellidos se sobreescriben los datos en la tabla de visualización y en la base de datos
+
+## NOTAS
+
+Hay ejemplos de excels para probar en el directorio de "excels"

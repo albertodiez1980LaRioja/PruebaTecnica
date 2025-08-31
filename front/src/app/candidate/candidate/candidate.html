@@ -19,6 +19,13 @@
     <div class="button">
         <button type="submit" [disabled]="candidateForm.invalid || !selectedFile" (click)="send()">Send</button>
     </div>
+
+    <div>
+        <app-table-material 
+            [data]="candidates" 
+            [displayedColumns]="candidateColumns">
+        </app-table-material>
+    </div>
 </form>
 
 

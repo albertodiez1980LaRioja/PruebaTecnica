@@ -74,6 +74,7 @@ export class Candidate {
       .subscribe({
         next: response => {
           this.clearForm();
+          this.candidates = this.candidates.filter(c => c.name !== response.name || c.surName !== response.surName);
           this.candidates.unshift(response);
           this.candidates = [...this.candidates];
           this.openDialog(PopupUpdated, response);

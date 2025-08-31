@@ -76,13 +76,31 @@ describe('CandidateService', () => {
         };
 
         const result = await service.create(req);
-        
+
         expect(result).toMatchObject({
             name: 'John',
             surName: 'Doe',
             seniority: 'senior',
             yearsExperience: 10,
             availability: false,
+        });
+    });
+
+    test('create() should call repository.create when previous row exists', async () => {
+        const buffer = await createExcelBuffer([, 'senior', 11, 'true']);
+        const req = {
+            file: { buffer },
+            body: { name: 'John', surname: 'Doe' },
+        };
+
+        const result = await service.create(req);
+
+        expect(result).toMatchObject({
+            name: 'John',
+            surName: 'Doe',
+            seniority: 'senior',
+            yearsExperience: 11,
+            availability: true,
         });
     });
 });
